@@ -1,0 +1,6 @@
+% docker images
+REPOSITORY                 TAG       IMAGE ID       CREATED          SIZE
+yourname/ubuntu-tmp-file   latest    ccc4aa2dbbcc   30 seconds ago   63.1MB
+nginx                      latest    f6987c8d6ed5   8 hours ago      141MB
+ubuntu                     18.04     5a214d77f5d7   2 months ago     63.1MB
+hello-world                latest    feb5d9fea6a5   2 months ago     13.3kB
