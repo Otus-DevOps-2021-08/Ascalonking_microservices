@@ -12,7 +12,8 @@ variables:
 
 before_script:
   - cd reddit
-  - apt-get update && apt-get install -y mongodb-server ruby-full ruby-dev build-essential git && gem install bundler
+  - apt-get update && apt-get install -y mongodb-server ruby-full ruby-dev build-essential git
+  - bundle install
 
 build_job:
   stage: build
