@@ -1,0 +1,57 @@
+---
+- name: Install Docker
+  hosts: gitlabcivm
+  become: true
+  gather_facts: False
+
+  tasks:
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Create directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0775
+      loop:
+        - /srv/gitlab/config
+        - /srv/gitlab/data
+        - /srv/gitlab/logs
+
+    - name: Create file
+      command: touch //srv/gitlab/docker-compose.yml
+      args:
+        creates: /srv/gitlab/docker-compose.yml
+
+    - name: Change docker-compose file
+      template:
+        src: /Users/kingascalon/Desktop/Ascalonking_infra/ansible/old/templates/docker-compose.j2
+        dest: /srv/gitlab/docker-compose.yml
+
+    - name: Install docker-compose
+      apt: "name={{ item }} state=present"
+      with_items:
+        - docker-compose
